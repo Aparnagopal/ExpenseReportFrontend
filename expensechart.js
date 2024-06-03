@@ -21,18 +21,20 @@ function fetchJSONData() {
       });
       datavis.addColumn({ type: "string", role: "style" });
       var len = data.length;
-      console.log("length of array:" + len);
+      //console.log("length of array:" + len);
       //datavis.addRows(len);
       const d = new Date();
       let day = d.getDay();
-      console.log("day" + d);
+      if (day === 0) day = 6;
+      else day = day - 1;
+      //console.log("day" + d);
       for (var i = 0; i < len; i++) {
         if (i === day)
           datavis.addRow([
             data[i].day,
             data[i].amount,
             "$" + data[i].amount,
-            "color:#e5e4e2",
+            "color:#76B5BC",
           ]);
         else
           datavis.addRow([
@@ -54,15 +56,30 @@ function fetchJSONData() {
       //]);
 
       // Set Options
+      var width = 0.3 * window.innerWidth;
+      var height = 0.4 * window.innerHeight;
       var chartColor = "#ec775f";
       var options = {
         title: "Spending - Last 7 days",
+        backgroundColor: "#FFFAF5",
+        width: width,
+        height: height,
+        chartArea: { left: "3%", right: "3%", top: "15%", bottom: "10%" },
+        bar: { groupWidth: "68%" },
+        titleTextStyle: {
+          color: "#382314",
+          fontName: "DM Sans",
+          fontSize: 18,
+        },
         tooltip: { isHtml: true },
         allowHtml: true,
         vAxis: {
           textPosition: "none",
           baselineColor: "none",
           gridlines: { count: 0 },
+        },
+        hAxis: {
+          textStyle: { color: "#93867B", fontName: "DM Sans" },
         },
         legend: { position: "none" },
         colors: [chartColor],
@@ -94,14 +111,19 @@ function fetchJSONData() {
         "onmouseout",
         chartMouseOut
       );
+      chart.clearChart();
       chart.draw(datavis, options);
+
+      //window.addEventListener("resize", fetchJSONData, false);
 
       function changeBorderRadius() {
         chartColumns = container.getElementsByTagName("rect");
-        console.log("chart column" + chartColumns);
+        //console.log("chart column" + chartColumns);
         Array.prototype.forEach.call(chartColumns, function (column) {
-          column.setAttribute("rx", 5);
-          column.setAttribute("ry", 5);
+          column.setAttribute("rx", 6);
+          column.setAttribute("ry", 6);
+          column.setAttribute("stroke", "none");
+          column.setAttribute("stroke-width", 0);
         });
       }
 
@@ -112,10 +134,13 @@ function fetchJSONData() {
         // filter bars by fill color
         var chartBars = chart1
           .getContainer()
-          .querySelectorAll('rect[fill="' + chartColor + '"]');
+          .querySelectorAll(
+            'rect[fill="' + "#ec775f" + '"],rect[fill="' + "#76b5bc" + '"]'
+          );
 
         // console.log("chartBars" + chartBars[index]);
-
+        // chartBars[index].setAttribute("stroke", "none");
+        //chartBars[index].setAttribute("stroke-width", 0);
         // set opacity on index provided
         chartBars[index].setAttribute("opacity", opacity);
       }
@@ -124,12 +149,13 @@ function fetchJSONData() {
         changeBorderRadius();
         // set opacity to 0.5
 
-        setBarOpacity(sender.row, 0.5);
+        setBarOpacity(sender.row, 0.8);
       }
 
       // chart mouseout event
       function chartMouseOut(sender) {
         // set opacity to 1
+
         changeBorderRadius();
         setBarOpacity(sender.row, 1);
       }
