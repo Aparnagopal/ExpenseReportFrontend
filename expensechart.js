@@ -64,12 +64,12 @@ function fetchJSONData() {
         backgroundColor: "#FFFAF5",
         width: width,
         height: height,
-        chartArea: { left: "3%", right: "3%", top: "15%", bottom: "10%" },
+        chartArea: { left: "5%", right: "5%", top: "25%", bottom: "10%" },
         bar: { groupWidth: "68%" },
         titleTextStyle: {
           color: "#382314",
           fontName: "DM Sans",
-          fontSize: 18,
+          fontSize: 24,
         },
         tooltip: { isHtml: true },
         allowHtml: true,
@@ -150,6 +150,28 @@ function fetchJSONData() {
         // set opacity to 0.5
 
         setBarOpacity(sender.row, 0.8);
+
+        // ensure point is hovered
+        if (sender.row !== null) {
+          var padding = 16;
+          var chartLayout = chart.getChartLayoutInterface();
+          var pointBounds = chartLayout.getBoundingBox(
+            "point#" + (sender.column - 1) + "#" + sender.row
+          );
+          var tooltip = chart
+            .getContainer()
+            .getElementsByClassName("google-visualization-tooltip");
+          if (tooltip.length > 0) {
+            var tooltipBounds = tooltip[0].getBoundingClientRect();
+            tooltip[0].style.top =
+              pointBounds.top - tooltipBounds.height - padding + "px";
+            tooltip[0].style.left =
+              pointBounds.left +
+              pointBounds.width / 2 -
+              tooltipBounds.width / 2 +
+              "px";
+          }
+        }
       }
 
       // chart mouseout event
