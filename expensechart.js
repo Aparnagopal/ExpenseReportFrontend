@@ -11,7 +11,7 @@ function fetchJSONData() {
       return res.json();
     })
     .then((data) => {
-      console.log(data[0].amount);
+      //console.log(data[0].amount);
       var datavis = new google.visualization.DataTable();
       datavis.addColumn("string", "Day");
       datavis.addColumn("number", "Amount");
@@ -43,17 +43,7 @@ function fetchJSONData() {
             "$" + data[i].amount,
             "",
           ]);
-        // datavis.setValue(i, 0, data[i].day);
-        // datavis.setValue(i, 1, data[i].amount);
       }
-      //var datavis = google.visualization.arrayToDataTable([
-      // ["Country", "Mhl", { role: "tooltip", p: { html: true } }],
-      // ["Italy", 54.8, "54.8T"],
-      // ["France", 48.6, "54.8T"],
-      // ["Spain", 44.4, "54.8T"],
-      // ["USA", 23.9, "54.8T"],
-      // ["Argentina", 14.5, "54.8T"],
-      //]);
 
       // Set Options
       var width = 0.3 * window.innerWidth;
@@ -114,11 +104,9 @@ function fetchJSONData() {
       chart.clearChart();
       chart.draw(datavis, options);
 
-      //window.addEventListener("resize", fetchJSONData, false);
-
       function changeBorderRadius() {
         chartColumns = container.getElementsByTagName("rect");
-        //console.log("chart column" + chartColumns);
+
         Array.prototype.forEach.call(chartColumns, function (column) {
           column.setAttribute("rx", 6);
           column.setAttribute("ry", 6);
@@ -138,9 +126,6 @@ function fetchJSONData() {
             'rect[fill="' + "#ec775f" + '"],rect[fill="' + "#76b5bc" + '"]'
           );
 
-        // console.log("chartBars" + chartBars[index]);
-        // chartBars[index].setAttribute("stroke", "none");
-        //chartBars[index].setAttribute("stroke-width", 0);
         // set opacity on index provided
         chartBars[index].setAttribute("opacity", opacity);
       }
@@ -156,7 +141,7 @@ function fetchJSONData() {
           var padding = 16;
           var chartLayout = chart.getChartLayoutInterface();
           var pointBounds = chartLayout.getBoundingBox(
-            "point#" + (sender.column - 1) + "#" + sender.row
+            "bar#" + (sender.column - 1) + "#" + sender.row
           );
           var tooltip = chart
             .getContainer()
@@ -184,5 +169,3 @@ function fetchJSONData() {
     })
     .catch((error) => console.error("Unable to fetch data:", error));
 }
-
-//console.log("expdata:" + data[0].amount);
